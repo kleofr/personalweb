@@ -1,0 +1,145 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+  mode?: "mobile" | "desktop" | "both";
+}
+
+interface TocTreeItem {
+  heading: Heading;
+  children: Heading[];
+}
+
+const { headings, mode = "both" } = Astro.props;
+
+// Filter to h2 and h3 (or whatever relevant depths are present)
+const relevant = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
+
+// Group hierarchically into tree: top-level sections + sub-item children
+const minDepth = relevant.length > 0 ? Math.min(...relevant.map((h) => h.depth)) : 2;
+
+const tocTree: TocTreeItem[] = [];
+let currentParent: TocTreeItem | null = null;
+
+for (const h of relevant) {
+  if (h.depth === minDepth) {
+    currentParent = { heading: h, children: [] };
+    tocTree.push(currentParent);
+  } else if (currentParent && h.depth > minDepth) {
+    currentParent.children.push(h);
+  } else {
+    currentParent = { heading: h, children: [] };
+    tocTree.push(currentParent);
+  }
+}
+---
+
+{tocTree.length > 0 && (
+  <>
+    {/* Mobile/Tablet Fallback Disclosure */}
+    {(mode === "mobile" || mode === "both") && (
+      <details class="lg:hidden my-6 text-[0.72rem] font-mono group">
+        <summary class="cursor-pointer select-none text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 font-medium transition-colors duration-150 list-none flex items-center gap-1.5">
+          <span class="font-heading text-sm text-neutral-400 dark:text-neutral-500 uppercase tracking-wide">
+            On This Page
+          </span>
+          <span class="text-neutral-400 group-open:rotate-90 transition-transform duration-150 select-none text-[0.7rem]">&rsaquo;</span>
+        </summary>
+        <ul class="mt-3 space-y-2 pl-3 border-l border-neutral-200 dark:border-neutral-800">
+          {tocTree.map((item) => (
+            <li class="space-y-1">
+              {item.children.length === 0 ? (
+                <a
+                  href={`#${item.heading.slug}`}
+                  class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 no-underline hover:underline underline-offset-2 transition-colors duration-150 block leading-snug"
+                >
+                  {item.heading.text}
+                </a>
+              ) : (
+                <details class="group/sub">
+                  <summary class="cursor-pointer select-none list-none flex items-baseline justify-between gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors duration-150">
+                    <a
+                      href={`#${item.heading.slug}`}
+                      class="no-underline hover:underline underline-offset-2 leading-snug flex-1"
+                    >
+                      {item.heading.text}
+                    </a>
+                    <span class="text-neutral-400 dark:text-neutral-600 group-open/sub:rotate-90 transition-transform duration-150 select-none text-[0.65rem] shrink-0 font-mono">
+                      &rsaquo;
+                    </span>
+                  </summary>
+                  <ul class="mt-1 space-y-1 pl-2.5 border-l border-neutral-200 dark:border-neutral-800">
+                    {item.children.map((child) => (
+                      <li>
+                        <a
+                          href={`#${child.slug}`}
+                          class="text-neutral-400 hover:text-neutral-800 dark:text-neutral-500 dark:hover:text-neutral-200 no-underline hover:underline underline-offset-2 transition-colors duration-150 block leading-snug text-[0.68rem]"
+                        >
+                          {child.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+            </li>
+          ))}
+        </ul>
+      </details>
+    )}
+
+    {/* Desktop Floating Sticky TOC */}
+    {(mode === "desktop" || mode === "both") && (
+      <nav aria-label="Table of contents" class="space-y-3 font-mono">
+        <p class="font-heading text-sm text-neutral-400 dark:text-neutral-500 tracking-wide">
+          On this page
+        </p>
+        <ul class="space-y-2 text-[0.7rem] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {tocTree.map((item) => (
+            <li class="space-y-1">
+              {item.children.length === 0 ? (
+                <a
+                  href={`#${item.heading.slug}`}
+                  class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 no-underline hover:underline underline-offset-2 transition-colors duration-150 block leading-snug"
+                >
+                  {item.heading.text}
+                </a>
+              ) : (
+                <details class="group/section">
+                  <summary class="cursor-pointer select-none list-none flex items-baseline justify-between gap-1 text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors duration-150">
+                    <a
+                      href={`#${item.heading.slug}`}
+                      class="no-underline hover:underline underline-offset-2 leading-snug flex-1"
+                    >
+                      {item.heading.text}
+                    </a>
+                    <span class="text-neutral-400 dark:text-neutral-600 group-open/section:rotate-90 transition-transform duration-150 select-none text-[0.7rem] shrink-0 font-mono px-1">
+                      &rsaquo;
+                    </span>
+                  </summary>
+                  <ul class="mt-1.5 space-y-1 pl-2.5 border-l border-neutral-200 dark:border-neutral-800">
+                    {item.children.map((child) => (
+                      <li>
+                        <a
+                          href={`#${child.slug}`}
+                          class="text-neutral-400 hover:text-neutral-800 dark:text-neutral-500 dark:hover:text-neutral-200 no-underline hover:underline underline-offset-2 transition-colors duration-150 block leading-snug text-[0.67rem]"
+                        >
+                          {child.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )}
+  </>
+)}

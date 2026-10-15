@@ -1,0 +1,117 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  currentPath?: string;
+  containerClass?: string;
+}
+
+const {
+  title = "Himanish More — Portfolio & Blog",
+  description = "Personal portfolio and blog of Himanish More — AI/ML systems and backend engineering.",
+  currentPath = Astro.url.pathname,
+  containerClass = "max-w-2xl",
+} = Astro.props;
+
+const pageTitle = title.includes("—") ? title : `${title} — Himanish More`;
+
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/projects", label: "Projects" },
+  { href: "/blog", label: "Blog" },
+  { href: "/about", label: "About" },
+];
+
+const isActive = (href: string) => {
+  if (href === "/") return currentPath === "/";
+  return currentPath.startsWith(href);
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Libre+Caslon+Condensed:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="min-h-screen flex flex-col selection:bg-neutral-200 dark:selection:bg-neutral-800">
+    <div class:list={["w-full mx-auto px-4 sm:px-6 flex-1 flex flex-col", containerClass]}>
+      <header class="sticky top-0 z-40 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3.5 bg-[#fafafa]/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md border-b border-neutral-200/50 dark:border-neutral-800/50 transition-colors">
+        <nav class="w-full flex items-center justify-between text-[0.72rem] font-mono" aria-label="Main Navigation">
+          {navLinks.map((link, index) => {
+            const active = isActive(link.href);
+            return (
+              <a
+                href={link.href}
+                class:list={[
+                  "relative py-1 no-underline transition-colors duration-150 inline-flex items-center gap-1.5",
+                  active
+                    ? "text-neutral-900 dark:text-neutral-100 font-medium"
+                    : "text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100"
+                ]}
+                aria-current={active ? "page" : undefined}
+              >
+                <span class="text-[0.6rem] text-neutral-400 dark:text-neutral-600 select-none">
+                  0{index + 1}
+                </span>
+                <span>{link.label.toLowerCase()}</span>
+                {active && (
+                  <span class="absolute bottom-0 left-0 right-0 h-[1px] bg-neutral-900 dark:bg-neutral-100" />
+                )}
+              </a>
+            );
+          })}
+        </nav>
+      </header>
+
+      <main id="main-content" class="flex-1 py-10">
+        <slot />
+      </main>
+
+      <footer class="py-8 border-t border-neutral-200 dark:border-neutral-800 text-xs text-neutral-500 dark:text-neutral-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <span>&copy; {new Date().getFullYear()} Himanish More. Zero bloat, content-first.</span>
+        </div>
+        <div class="flex items-center space-x-4">
+          <a
+            href="https://github.com/kleofr"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-neutral-500 hover:text-blue-600 dark:hover:text-blue-400 no-underline transition-colors duration-150"
+            aria-label="GitHub profile"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://www.linkedin.com/in/himanishmore/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-neutral-500 hover:text-blue-600 dark:hover:text-blue-400 no-underline transition-colors duration-150"
+            aria-label="LinkedIn profile"
+          >
+            LinkedIn
+          </a>
+          <a
+            href="mailto:morehimanish@gmail.com"
+            class="text-neutral-500 hover:text-blue-600 dark:hover:text-blue-400 no-underline transition-colors duration-150"
+            aria-label="Email Himanish More"
+          >
+            Email
+          </a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

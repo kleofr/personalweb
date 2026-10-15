@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import projectsData from '../data/projects.json';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const latestPosts = allPosts
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+
+const featuredProjects = projectsData.filter((p) => p.featured).slice(0, 3);
+
+const formatDate = (date: Date) => {
+  return date.toISOString().split('T')[0];
+};
+---
+
+<BaseLayout title="Himanish More — AI/ML & Systems Engineer">
+  <!-- Bio Section -->
+  <section class="mb-12" aria-labelledby="bio-heading">
+    <h1 id="bio-heading" class="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 mb-4">
+      Himanish More
+    </h1>
+    <p class="text-neutral-700 dark:text-neutral-300 leading-relaxed mb-4">
+      I build defensive AI/ML systems, MLSecOps infrastructure, and resilient backend services.
+      My work focuses on defense-in-depth LLM gateways, automated network intrusion detection, and reliable state machines.
+      Currently engineering intelligent pipelines with LangGraph, PyTorch, and containerized FastAPI runtimes.
+    </p>
+    <div class="flex items-center space-x-4 text-sm">
+      <a href="https://github.com/kleofr" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <span class="text-neutral-300 dark:text-neutral-700 select-none">/</span>
+      <a href="https://www.linkedin.com/in/himanishmore/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <span class="text-neutral-300 dark:text-neutral-700 select-none">/</span>
+      <a href="mailto:morehimanish@gmail.com">Email</a>
+    </div>
+  </section>
+
+  <!-- Featured Projects Section -->
+  <section class="mb-12" aria-labelledby="featured-projects-heading">
+    <div class="flex items-center justify-between mb-4">
+      <h2 id="featured-projects-heading" class="text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+        Featured Projects
+      </h2>
+      <a href="/projects" class="text-xs text-neutral-500 hover:text-blue-600 dark:hover:text-blue-400">
+        View all &rarr;
+      </a>
+    </div>
+    <div class="space-y-6">
+      {featuredProjects.map((project) => (
+        <article class="space-y-1.5">
+          <div class="flex items-baseline justify-between gap-4">
+            <h3 class="font-medium text-neutral-900 dark:text-neutral-100">
+              <a href={project.demo || project.repo} target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 dark:hover:text-blue-400">
+                {project.title}
+              </a>
+            </h3>
+            <div class="flex items-center space-x-3 text-xs shrink-0">
+              {project.repo && (
+                <a href={project.repo} target="_blank" rel="noopener noreferrer" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100">
+                  code &nearr;
+                </a>
+              )}
+              {project.demo && (
+                <a href={project.demo} target="_blank" rel="noopener noreferrer" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100">
+                  demo &nearr;
+                </a>
+              )}
+            </div>
+          </div>
+          <p class="text-neutral-600 dark:text-neutral-400">
+            {project.description}
+          </p>
+          <div class="flex flex-wrap gap-x-2 gap-y-1 text-xs text-neutral-500">
+            {project.tags.map((tag) => (
+              <span>#{tag}</span>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Latest Writing Section -->
+  <section aria-labelledby="writing-heading">
+    <div class="flex items-center justify-between mb-4">
+      <h2 id="writing-heading" class="text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+        Writing
+      </h2>
+      <a href="/blog" class="text-xs text-neutral-500 hover:text-blue-600 dark:hover:text-blue-400">
+        All posts &rarr;
+      </a>
+    </div>
+    <ul class="space-y-3">
+      {latestPosts.map((post) => (
+        <li class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
+          <time datetime={formatDate(post.data.pubDate)} class="font-mono text-xs text-neutral-500 dark:text-neutral-500 shrink-0">
+            {formatDate(post.data.pubDate)}
+          </time>
+          <a
+            href={`/blog/${post.id}`}
+            class="text-sm text-neutral-900 dark:text-neutral-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-150"
+          >
+            {post.data.title}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

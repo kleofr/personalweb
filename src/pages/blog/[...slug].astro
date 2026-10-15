@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import TableOfContents from '../../components/TableOfContents.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+const formatDate = (date: Date) => {
+  return date.toISOString().split('T')[0];
+};
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  containerClass="max-w-2xl lg:max-w-5xl"
+>
+  <!-- Article Header -->
+  <header class="mb-8 max-w-2xl">
+    <a
+      href="/blog"
+      class="text-xs text-neutral-500 hover:text-blue-600 dark:hover:text-blue-400 no-underline transition-colors duration-150 inline-flex items-center gap-1 mb-6"
+    >
+      &larr; Back to writing
+    </a>
+    <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 mb-3">
+      {post.data.title}
+    </h1>
+    <div class="flex flex-wrap items-center gap-3 text-xs text-neutral-500 dark:text-neutral-500 font-mono">
+      <time datetime={formatDate(post.data.pubDate)}>
+        {formatDate(post.data.pubDate)}
+      </time>
+      {post.data.tags && post.data.tags.length > 0 && (
+        <>
+          <span>&bull;</span>
+          <div class="flex items-center gap-1.5">
+            {post.data.tags.map((tag) => (
+              <span class="text-neutral-600 dark:text-neutral-400">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  </header>
+
+  <!-- 2-Column Layout below heading: Article Content + Sticky Floating TOC -->
+  <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-8">
+    <article class="min-w-0 max-w-2xl lg:pr-4">
+      {/* Mobile/Tablet TOC: placed below heading */}
+      <TableOfContents headings={headings} mode="mobile" />
+
+      {post.data.heroImage && (
+        <div class="mb-8 overflow-hidden">
+          <Image
+            src={post.data.heroImage}
+            alt={post.data.heroAlt || post.data.title}
+            class="w-full h-auto object-cover"
+          />
+        </div>
+      )}
+
+      <div class="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200 prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-inherit hover:prose-a:text-blue-600 dark:hover:prose-a:text-blue-400 prose-code:font-mono prose-pre:border prose-pre:border-neutral-200 dark:prose-pre:border-neutral-800">
+        <Content />
+      </div>
+    </article>
+
+    {/* Desktop Floating Sticky TOC with vertical divider border */}
+    <aside class="hidden lg:block h-full lg:border-l lg:border-neutral-200 lg:dark:border-neutral-800 lg:pl-8">
+      <div class="sticky top-8 max-h-[calc(100vh-4rem)] overflow-y-auto pr-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <TableOfContents headings={headings} mode="desktop" />
+      </div>
+    </aside>
+  </div>
+</BaseLayout>

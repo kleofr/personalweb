@@ -1,0 +1,154 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About"
+  description="Background, experience, education, skills, and resume of Himanish More."
+>
+  <header class="mb-8">
+    <h1 class="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 mb-2">
+      About
+    </h1>
+    <p class="text-sm text-neutral-600 dark:text-neutral-400">
+      Background, technical capabilities, experience, and education.
+    </p>
+  </header>
+
+  <article class="space-y-10 text-neutral-800 dark:text-neutral-200 text-sm leading-relaxed">
+    <!-- Background Section -->
+    <section aria-labelledby="about-background-heading">
+      <h2 id="about-background-heading" class="text-base font-semibold text-neutral-900 dark:text-neutral-100 mb-3 tracking-tight">
+        Background
+      </h2>
+      <p class="mb-3">
+        I am a software engineer focused on building defensive AI/ML systems, MLSecOps infrastructure,
+        and high-throughput backend services. My work spans the intersection of applied machine learning,
+        network telemetry, and security gateways that enforce zero-trust guarantees on generative models.
+      </p>
+      <p>
+        I value deterministic invariants over fragile prompts, fast and reproducible local runtimes,
+        and software designed with zero unnecessary runtime overhead.
+      </p>
+    </section>
+
+    <!-- Experience Section -->
+    <section aria-labelledby="about-experience-heading">
+      <h2 id="about-experience-heading" class="text-base font-semibold text-neutral-900 dark:text-neutral-100 mb-3 tracking-tight">
+        Experience
+      </h2>
+      <div class="space-y-4">
+        <article class="space-y-1.5">
+          <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+            <h3 class="font-medium text-neutral-900 dark:text-neutral-100">
+              Vizipp Inc. <span class="font-normal text-neutral-500">&mdash; Java Intern</span>
+            </h3>
+            <span class="text-xs text-neutral-500 shrink-0">Jan 2025 &ndash; Apr 2025</span>
+          </div>
+          <p class="text-xs text-neutral-500">Remote</p>
+          <ul class="list-disc list-outside pl-4 space-y-1 text-neutral-600 dark:text-neutral-400">
+            <li>Created and maintained Java-based systems and features, improving internal modules and application performance.</li>
+            <li>Integrated Razorpay payment gateway into client e-commerce platforms, handling checkout flows and transaction edge cases.</li>
+            <li>Debugged production issues, traced application error paths, and resolved defects across a shared codebase.</li>
+            <li>Collaborated with senior engineers using Git workflows, branch protection, and code reviews to deploy production features.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Education Section -->
+    <section aria-labelledby="about-education-heading">
+      <h2 id="about-education-heading" class="text-base font-semibold text-neutral-900 dark:text-neutral-100 mb-3 tracking-tight">
+        Education
+      </h2>
+      <div class="space-y-4">
+        <article class="space-y-1">
+          <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+            <h3 class="font-medium text-neutral-900 dark:text-neutral-100">
+              P.E.S. Modern College of Engineering, Pune
+            </h3>
+            <span class="text-xs text-neutral-500 shrink-0">2023 &ndash; 2026</span>
+          </div>
+          <p class="text-neutral-600 dark:text-neutral-400">
+            Bachelor of Information Technology
+          </p>
+        </article>
+
+        <article class="space-y-1">
+          <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+            <h3 class="font-medium text-neutral-900 dark:text-neutral-100">
+              M.E.T Bhujbal Knowledge City, Nashik
+            </h3>
+            <span class="text-xs text-neutral-500 shrink-0">2021 &ndash; 2023</span>
+          </div>
+          <p class="text-neutral-600 dark:text-neutral-400">
+            Diploma in Computer Engineering
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Technical Skills Section -->
+    <section aria-labelledby="about-skills-heading">
+      <h2 id="about-skills-heading" class="text-base font-semibold text-neutral-900 dark:text-neutral-100 mb-3 tracking-tight">
+        Technical Skills
+      </h2>
+      <div class="space-y-2.5">
+        <div>
+          <span class="font-medium text-neutral-900 dark:text-neutral-100">Languages:</span>
+          <span class="text-neutral-600 dark:text-neutral-400 ml-1">Python, Java, JavaScript, TypeScript, C++, SQL</span>
+        </div>
+        <div>
+          <span class="font-medium text-neutral-900 dark:text-neutral-100">AI & Machine Learning:</span>
+          <span class="text-neutral-600 dark:text-neutral-400 ml-1">LangGraph, PyTorch, Hugging Face, Scikit-Learn, TensorFlow, Pandas, NumPy</span>
+        </div>
+        <div>
+          <span class="font-medium text-neutral-900 dark:text-neutral-100">Backend & Data:</span>
+          <span class="text-neutral-600 dark:text-neutral-400 ml-1">FastAPI, REST APIs, Docker, PostgreSQL, MySQL, Supabase</span>
+        </div>
+        <div>
+          <span class="font-medium text-neutral-900 dark:text-neutral-100">Tools & Frontend:</span>
+          <span class="text-neutral-600 dark:text-neutral-400 ml-1">React, Vite, Git, Pytest, Docker Compose</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resume Download & Links -->
+    <section aria-labelledby="about-contact-heading">
+      <h2 id="about-contact-heading" class="text-base font-semibold text-neutral-900 dark:text-neutral-100 mb-3 tracking-tight">
+        Resume & Contact
+      </h2>
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+        <a
+          href="/Himanish_More_Resume.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Resume (PDF) &nearr;
+        </a>
+        <span class="text-neutral-300 dark:text-neutral-700 select-none">&bull;</span>
+        <a
+          href="mailto:morehimanish@gmail.com"
+        >
+          morehimanish@gmail.com
+        </a>
+        <span class="text-neutral-300 dark:text-neutral-700 select-none">&bull;</span>
+        <a
+          href="https://www.linkedin.com/in/himanishmore/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          LinkedIn
+        </a>
+        <span class="text-neutral-300 dark:text-neutral-700 select-none">&bull;</span>
+        <a
+          href="https://github.com/kleofr"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub
+        </a>
+      </div>
+    </section>
+  </article>
+</BaseLayout>

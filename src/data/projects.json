@@ -1,0 +1,18 @@
+[
+  {
+    "title": "TriageGuard: MLSecOps Support Gateway",
+    "description": "3-tier defense-in-depth gateway stopping prompt injection and PII leakage in LLM support, combining deterministic sanitization, regex scanning, Llama PromptGuard 2-86M, and LangGraph.",
+    "tags": ["LangGraph", "FastAPI", "Llama 3.3 70B", "PromptGuard", "Supabase", "React 19", "Docker"],
+    "repo": "https://github.com/kleofr/triageguard",
+    "demo": "",
+    "featured": true
+  },
+  {
+    "title": "IoT Intrusion Detection System",
+    "description": "Network attack classifier trained on the ACI-IoT-2023 dataset to catch threats missed by signature rules, served via FastAPI with a containerized React SOC dashboard.",
+    "tags": ["Scikit-Learn", "FastAPI", "React", "Docker Compose", "Python", "ACI-IoT-2023"],
+    "repo": "https://github.com/kleofr/iot-network-intrusion-detection",
+    "demo": "",
+    "featured": true
+  }
+]
